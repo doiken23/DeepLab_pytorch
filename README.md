@@ -8,7 +8,7 @@
 
 ## Contents
 
-* DeepLab v1 (coming soon...)
+* DeepLab v1
 * DeepLab v2
 * DeepLab v3 (coming soon...)
 * DeepLab v3+ (coming soon...)
