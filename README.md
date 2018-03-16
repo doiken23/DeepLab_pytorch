@@ -8,11 +8,11 @@
 
 ## Contents
 
-* DeepLab v2 (VGG, ResNet)
-* DeepLab v3 (coming soon...)
+* DeepLab v2 (VGG, ResNet101)
+* DeepLab v3 (ResNet101)
 * DeepLab v3+ (coming soon...)
 
-(DeepLab v2 & VGG16 model is a little different from original one!!) 
+(DeepLab v2 (VGG16) is a little different from original implementation!!) 
 
 ## description
 
