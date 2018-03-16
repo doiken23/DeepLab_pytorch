@@ -45,10 +45,10 @@ class Atrous_Bottleneck(nn.Module):
 
         return out
 
-class Atrous_ResNet_classifier(nn.Module):
+class Atrous_ResNet_features(nn.Module):
 
     def __init__(self, block, layers, pretrained=False):
-        super(Atrous_ResNet_classifier, self).__init__()
+        super(Atrous_ResNet_features, self).__init__()
         self.inplanes = 64
 
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
@@ -90,7 +90,7 @@ class Atrous_ResNet_classifier(nn.Module):
         layers.append(block(self.inplanes, planes, stride, rate, downsample))
         self.inplanes = planes * block.expansion
         for i in range(1, blocks):
-            layers.append(block(self.inplanes, planes))
+            layers.append(block(self.inplanes, planes, stride=1, rate=rate))
 
         return nn.Sequential(*layers)
 
@@ -127,7 +127,7 @@ class DeepLabv2_ASPP(nn.Module):
     def __init__(self, num_classes, small=True, pretrained=False):
         super(DeepLabv2_ASPP, self).__init__()
         block = Atrous_Bottleneck
-        self.resnet_classifier = Atrous_ResNet_classifier(block, [3, 4, 23, 3], pretrained)
+        self.resnet_features = Atrous_ResNet_features(block, [3, 4, 23, 3], pretrained)
 
         if small:
             rates = [2, 4, 8, 12]
@@ -139,7 +139,7 @@ class DeepLabv2_ASPP(nn.Module):
         self.aspp4 = Atrous_module(2048 , num_classes, rate=rates[3])
         
     def forward(self, x):
-        x = self.resnet_classifier(x)
+        x = self.resnet_features(x)
         x1 = self.aspp1(x)
         x2 = self.aspp2(x)
         x3 = self.aspp3(x)
@@ -154,12 +154,12 @@ class DeepLabv2_FOV(nn.Module):
     def __init__(self, num_classes, pretrained=True):
         super(DeepLabv2_FOV, self).__init__()
         block = Atrous_Bottleneck
-        self.resnet_classifier = Atrous_ResNet_classifier(block, [3, 4, 23, 3], pretrained)
+        self.resnet_features = Atrous_ResNet_features(block, [3, 4, 23, 3], pretrained)
 
         self.atrous = Atrous_module(2048 , num_classes, rate=12)
         
     def forward(self, x):
-        x = self.resnet_classifier(x)
+        x = self.resnet_features(x)
         x = self.atrous(x)
         x = F.upsample(x, scale_factor=8, mode='bilinear')
 
