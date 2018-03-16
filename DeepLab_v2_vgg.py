@@ -73,7 +73,7 @@ class Atrous_module(nn.Module):
 class DeepLabv1_ASPP(nn.Module):
     def __init__(self, num_classes, small=True, pretrained=False):
         super(DeepLabv2_ASPP, self).__init__()
-        self.vgg_classifier = VGG16_feature(pretrained)
+        self.vgg_feature = VGG16_feature(pretrained)
 
         if small:
             rates = [2, 4, 8, 12]
@@ -85,7 +85,7 @@ class DeepLabv1_ASPP(nn.Module):
         self.aspp4 = Atrous_module(2048 , num_classes, rate=rates[3])
         
     def forward(self, x):
-        x = self.resnet_classifier(x)
+        x = self.vgg_feature(x)
         x1 = self.aspp1(x)
         x2 = self.aspp2(x)
         x3 = self.aspp3(x)
@@ -99,12 +99,12 @@ class DeepLabv1_ASPP(nn.Module):
 class DeepLabv1_FOV(nn.Module):
     def __init__(self, num_classes, pretrained=True):
         super(DeepLabv2_FOV, self).__init__()
-        self.vgg_classifier = VGG16_feature(pretrained)
+        self.vgg_feature = VGG16_feature(pretrained)
 
         self.atrous = Atrous_module(2048 , num_classes, rate=12)
         
     def forward(self, x):
-        x = self.resnet_classifier(x)
+        x = self.vgg_feature(x)
         x = self.atrous(x)
         x = F.upsample(x, scale_factor=8, mode='bilinear')
 
