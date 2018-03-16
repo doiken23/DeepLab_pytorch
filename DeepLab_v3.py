@@ -152,7 +152,8 @@ class DeepLabv3(nn.Module):
         self.image_pool = nn.Sequential(nn.AdaptiveMaxPool2d(1),
                                         nn.Conv2d(2048, 256, kernel_size=1))
 
-        self.fc1 = nn.Conv2d(1280, 256, kernel_size=1)
+        self.fc1 = nn.Sequential(nn.Conv2d(1280, 256, kernel_size=1),
+                                 nn.BatchNorm2d(256))
         self.fc2 = nn.Conv2d(256, num_classes, kernel_size=1)
         
     def forward(self, x):
