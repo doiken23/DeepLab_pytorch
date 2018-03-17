@@ -160,7 +160,10 @@ class DeepLabv3_plus(nn.Module):
                                           nn.BatchNorm2d(48))
         self.last_conv = nn.Sequential(nn.Conv2d(304, 256, kernel_size=3, stride=1, padding=1),
                                        nn.BatchNorm2d(256),
-                                       nn.Conv2d(256, num_classes, kernel_size=3, stride=1, padding=1))
+                                       nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+                                       nn.BatchNorm2d(256),
+                                       nn.Conv2d(256, num_classes, kernel_size=1, stride=1))
+
         
     def forward(self, x):
         x, conv2 = self.resnet_features(x)
