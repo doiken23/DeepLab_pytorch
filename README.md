@@ -24,3 +24,8 @@ DeepLab v2 (ResNet, FOV)| ResNet101 + atrous convolution
 DeepLab v2 (ResNet, ASPP) | ResNet101 + atrous spatial pyramid pooling
 DeepLab v3 | ResNet101 + atrous convolution in cascadea and in parallel
 DeepLab v3+ | DeepLab v3 + good decoder (and Xception)
+
+## LICENSE
+
+* MIT
+    * see LICENSE
